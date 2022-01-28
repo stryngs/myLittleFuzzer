@@ -50,9 +50,9 @@ Refer to the documents for a deeper explanation, https://scapy.readthedocs.io/en
 ### Where was it stored
 .\\hex.log
 ```
-Leverages binascii and hexstr to store fuzzed packets in a trackable manner.
-What is printed in hex.log is exactly what was transmitted, sans a crtl+c for an interrupt.
-{interval} and the general speed of the device used to run pwnie.py matter for high quantity and low interrupt speed runs.
+Leverages binascii and hexstr to store fuzzed packets in a trackable manner
+What is printed in hex.log is exactly what was transmitted, sans a crtl+c for an interrupt
+{interval} and the general speed of the device used to run pwnie.py will matter for a high {quantity of fuzzed packets} and a low {interval}
 ```
 ping.log
 ```
