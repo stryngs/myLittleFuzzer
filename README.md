@@ -27,7 +27,7 @@ python3 -m pip install easy-thread/easy-thread-*.tar.gz
 ```
 Verbosity is optional with a 1 on the end
 ```
-../pwnie.py 192.168.100.1 192.168.100.0/24 2000 3 1
+./pwnie.py 192.168.100.1 192.168.100.0/24 2000 3 1
 ```
 
 ### What did you do
