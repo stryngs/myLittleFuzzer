@@ -1,4 +1,7 @@
 
+
+
+
 # myLittleFuzzer
 Grab the pwnie by the horns and get to work fuzzing
 
@@ -11,7 +14,7 @@ python3 -m pip install dist/*.tar.gz
 python3 -m pip install easy-thread/easy-thread-*.tar.gz
 ```
 
-### Buckle up
+### In the chute now
 ```
 git clone https://github.com/secdev/scapy.git
 git clone https://github.com/stryngs/easy-thread.git
@@ -21,49 +24,64 @@ python3 -m pip install easy-thread/easy-thread-*.tar.gz
 ```
 
 ### The gist
-./pwnie.py {target ip} {source ip/cidr range} {quantity of fuzzed packets} {interval} *{verbosity}*
-```
-./pwnie.py 192.168.100.1 192.168.100.0/24 2000 3
-```
-Verbosity is optional with a 1 on the end
-```
-./pwnie.py 192.168.100.1 192.168.100.0/24 2000 3 1
-```
+ -i {interface}
+ -p {destination port}
+ -q {quantity of fuzzed packets}
+ -s {source ip/cidr range}
+ -t {target ip}
+ -v {verbosity}
+ -w {per packet interval}
+ ```
+ usage: pwnie.py [-h] -i I [-p P] -q Q -s S -t T [-v V] -w W
 
-### What did you do
-```
-./pwnie.py 192.168.103.1 192.168.202.1/20 21 .3 1
-```
-In other words chat at layer 3 with something like a router.  During this chat leverage the fuzz() from scapy and be random.
-This syntax sent 21 fuzzed packets to 192.168.103.1 posing as a packet in the 192.168.202.1/20 range at an interval of .3 seconds per packet.
-The 1 on the end specified verbosity and so for every packet sent a . will be printed to stdout.
-Verbosity is useful but can have a negative effect on the performance of the sending node relative to the {quantity of fuzzed packets}.
+ myLittleFuzzer
 
-### How it fuzzed
-```
-fuzz(IP(dst = {target IP}, src = RandIP({source ip/cidr range})))
-```
+ optional arguments:
+   -h, --help  show this help message and exit
+   -i I        Interface
+   -p P        Target Port
+   -q Q        Quantity of packets fuzzed
+   -s S        CIDR source range
+   -t T        Target IP
+   -v V        Verbosity
+   -w W        Wait between injects
+  ```
+
+### How exactly
 The function fuzz() is able to change any default value that is not to be calculated (like checksums) by an object whose value is random and whose type is adapted to the field. This enables quickly building fuzzing templates and sending them in a loop.
 
 Refer to the documents for a deeper explanation, https://scapy.readthedocs.io/en/latest/usage.html#fuzzing.
 
-### Where was it stored
-.\\hex.log
+### SQL table schema
+brd
+```
+The bridle table is one to rule them all
+```
+hex
 ```
 Leverages binascii and hexstr to store fuzzed packets in a trackable manner
-What is printed in hex.log is exactly what was transmitted, sans a crtl+c for an interrupt
-{interval} and the general speed of the device used to run pwnie.py will matter for a high {quantity of fuzzed packets} and a low {interval}
+What is stored in hex is exactly what was transmitted, sans a crtl+c for an interrupt
 ```
-ping.log
+png
 ```
-The stdout for ping -D against {target ip}
-Useful for timing guesses based upon the {interval}
+The stdout for ping -D against the target ip during the run
+Useful for timing guesses based upon the wait between packets
 ```
-summary.log
+sum
 ```
-A stdout representation of summary()
 Useful for an overview without needing to be exact
 ```
+
+### Shelter and a diet
+Hungry pwnies are angry pwnies.  Avoid this by making sure to tune their diet from time to time.  Too much fuzz and not enough lag makes for a boring ride.  The more trails you ride the higher level your corral grows.  Pull the reins from time to time and make sure you're riding with the latest gear.  A smart rider does this from time to time before running:
+```
+cp saddle.sqlite3 saddle.sqlite3.copy
+git pull
+./pwnie.py ........
+```
+
+### Hash it out
+**saddle.sqlite3** is where the young herd is bred.  As your herd grows, so does the chance of catching a pwnie in the wild.  Let your herd roam as free as possible.
 
 ### Highly recommended
 Use pypy3 from https://www.pypy.org/ for a 0 code change benchmark increase!
