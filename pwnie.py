@@ -84,28 +84,37 @@ if __name__ == '__main__':
                         help = 'Wait between injects',
                         required = True)
     args = parser.parse_args()
+    tVal = int(args.q) * float(args.w)
+    cVal = 'seconds'
+    if tVal > 300:
+        tVal = tVal / 60
+        cVal = 'minutes'
+    uAcc = input('Estimated time for fuzz is {0} {1}\n Shall we proceed? [Y/n]\n '.format(tVal, cVal))
+    if uAcc.lower() == 'y' or uAcc == '':
 
-    ## Pick your stall and saddle up
-    py = Corral()
-    py.db.execute("""SELECT rd FROM brd ORDER BY 1 DESC;""")
-    rodeo = [i for i in py.db.fetchall()]
-    if len(rodeo) > 0:
-        py.ride = rodeo[0][0]
-        py.ride += 1
+        ## Pick your stall and saddle up
+        py = Corral()
+        py.db.execute("""SELECT rd FROM brd ORDER BY 1 DESC;""")
+        rodeo = [i for i in py.db.fetchall()]
+        if len(rodeo) > 0:
+            py.ride = rodeo[0][0]
+            py.ride += 1
+        else:
+            py.ride = 0
+
+        ## Where to
+        py.tgtIP = args.t
+        py.srcCIDR = args.s
+        py.fCount = int(args.q)
+        py.iVal = float(args.w)
+        py.vCheck = args.v
+        py.iFace = args.i
+        try:
+            py.port = int(args.p)
+        except:
+            py.port = args.p
+
+        ## Giddyup
+        main(py)
     else:
-        py.ride = 0
-
-    ## Where to
-    py.tgtIP = args.t
-    py.srcCIDR = args.s
-    py.fCount = int(args.q)
-    py.iVal = float(args.w)
-    py.vCheck = args.v
-    py.iFace = args.i
-    try:
-        py.port = int(args.p)
-    except:
-        py.port = args.p
-
-    ## Giddyup
-    main(py)
+        print(' Exiting\n')
