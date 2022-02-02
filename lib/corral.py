@@ -1,3 +1,4 @@
+import argparse
 import sqlite3 as lite
 
 class Corral(object):
@@ -8,6 +9,37 @@ class Corral(object):
         self.db = self.con.cursor()
         self.saddleCheck()
         self.con.commit()
+        self.inputFile = None
+        self.genOnly = None
+
+
+    def menu(self):
+        parser = argparse.ArgumentParser(description = 'myLittleFuzzer')
+        group = parser.add_mutually_exclusive_group(required = True)
+        group.add_argument('--file',
+                           help = 'Read from a file instead of generating fuzz')
+        group.add_argument('--gen',
+                           action = 'store_true',
+                           help = 'Generate a stream of fuzz for usage later')
+        group.add_argument('--run',
+                           action = 'store_true',
+                           help = 'Generate and send fuzz')
+        parser.add_argument('-i',
+                            help = 'Interface')
+        parser.add_argument('-p',
+                            help = 'Target Port')
+        parser.add_argument('-q',
+                            help = 'Quantity of packets fuzzed')
+        parser.add_argument('-s',
+                             help = 'CIDR source range')
+        parser.add_argument('-t',
+                            help = 'Target IP')
+        parser.add_argument('-v',
+                            action = 'store_true',
+                            help = 'Verbosity')
+        parser.add_argument('-w',
+                            help = 'Wait between injects')
+        return parser
 
 
     def saddleCheck(self):
@@ -36,9 +68,3 @@ class Corral(object):
                         CREATE TABLE IF NOT EXISTS
                         brd(rd INTEGER PRIMARY KEY, start INTEGER, end INTEGER, span INTEGER);
                         """)
-
-
-if __name__ == '__main__':
-
-    ## Save a horse, ride a pwnie
-    py = Corral()

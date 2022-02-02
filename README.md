@@ -24,27 +24,23 @@ python3 -m pip install easy-thread/easy-thread-*.tar.gz
 ```
 
 ### The gist
- -i {interface}
- -p {destination port}
- -q {quantity of fuzzed packets}
- -s {source ip/cidr range}
- -t {target ip}
- -v {verbosity}
- -w {per packet interval}
  ```
- usage: pwnie.py [-h] -i I [-p P] -q Q -s S -t T [-v V] -w W
+ usage: pwnie.py [-h] (--file FILE | --gen | --run) [-i I] [-p P] [-q Q] [-s S] [-t T] [-v] [-w W]
 
  myLittleFuzzer
 
  optional arguments:
-   -h, --help  show this help message and exit
-   -i I        Interface
-   -p P        Target Port
-   -q Q        Quantity of packets fuzzed
-   -s S        CIDR source range
-   -t T        Target IP
-   -v V        Verbosity
-   -w W        Wait between injects
+   -h, --help   show this help message and exit
+   --file FILE  Read from a file instead of generating fuzz, then send
+   --gen        Generate a stream of fuzz for usage later
+   --run        Generate and send fuzz
+   -i I         Interface
+   -p P         Target Port
+   -q Q         Quantity of packets fuzzed
+   -s S         CIDR source range
+   -t T         Target IP
+   -v           Verbosity
+   -w W         Wait between injects
   ```
 
 ### How exactly
@@ -71,6 +67,37 @@ sum
 ```
 Useful for an overview without needing to be exact
 ```
+
+### Modes of operation
+Read from a file instead of generating fuzz, then send.
+```
+Required args for --file:
+ -i
+ -w
+
+./pwnie.py --file -i wlan0 -w 1
+```
+Generate a stream of fuzz for usage later.
+```
+Requred args for --gen:
+ -q
+ -s
+ -t
+
+ ./pwnie.py --gen -q 2000 -s 192.168.100.0/23 -t 192.168.100.3
+```
+Generate and send fuzz.
+```
+Requred args for --run:
+ -i
+ -q
+ -s
+ -t
+ -w
+
+ ./pwnie.py --run -i wlan0 -q 2000 -s 192.128.2.1/32 -t 192.128.2.2 -w .5
+ ```
+
 
 ### Shelter and a diet
 Hungry pwnies are angry pwnies.  Avoid this by making sure to tune their diet from time to time.  Too much fuzz and not enough lag makes for a boring ride.  The more trails you ride the higher level your corral grows.  Pull the reins from time to time and make sure you're riding with the latest gear.  A smart rider does this from time to time before running:
